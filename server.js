@@ -3,9 +3,13 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { executeTodos } from "./data/data.js";
 //import todoApi from "./basicRestFullApi.js";
-import { models, connectDb } from "./models/index.js";
+import { models } from "./models/index.js";
 
-const PORT = 3000;
+import dotenv from "dotenv";
+
+mongoose.set("strictQuery", true);
+dotenv.config();
+const {PORT} = process.env;
 const app = express();
 //const router = app.router
 
@@ -15,7 +19,7 @@ app.use(cors());
 //app.use(todoApi); // change to router!!!
 
 // connection to the MondoDb
-connectDb();
+//connectDb();
 
 
 
@@ -72,7 +76,16 @@ app.delete("/api/todos/deleteTodo/:id", async (req, res) => {
 });
 
 
-
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+mongoose.connect(
+  "mongodb+srv://chen:chen1234@eco.bikioo2.mongodb.net/test",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (err) => {
+    console.log('err', err);
+    app.listen(PORT, () => {
+      console.log(`Server listening on port`);
+    });
+  }
+);
